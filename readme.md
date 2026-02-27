@@ -413,4 +413,4 @@ Walsh–Hadamard transform.
 
 > It changes basis from Computational basis (bit states) to Phase basis (interference patterns of $\pm 1$). It’s like a simplified Fourier transform over binary strings. It spreads amplitude evenly across states, enabling interference.
 
-### 1.4.3 Deutsch’s algorithm
+### 1.4.3 Deutsch’s algorithm3
