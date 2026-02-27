@@ -1,6 +1,9 @@
 # Quantum Computation and Quantum Information  (Michael A. Nielsen, Isaac L. Chuang) notes
 
 ## 0 Nomenclature and notation
+https://www.mathsisfun.com/physics/bra-ket-notation.html 
+
+> Bra-Ket Notation is sometimes called Dirac Notation.  
 
 Ket:  column vector
 
@@ -24,7 +27,7 @@ $$
 
 > By convention, $\psi \equiv \ket{\psi}$, required for understanding but not recommended in formal writing.
 
-Bra: row vector, Hermitian conjugate (complex conjugate transpose) of a Ket.
+Bra: row vector, Hermitian conjugate (complex conjugate transpose) (aka adjoint) of a Ket. 
 
 $$\bra{\psi} = \begin{pmatrix}\alpha^* & \beta^*\end{pmatrix} = (\psi^*)^T = \psi^\dagger $$
 Bra-ket: inner product
@@ -47,6 +50,8 @@ support: the vector space orthogonal to its kernel.
 | Physical meaning       | Rotation / symmetry  | Reflection-type symmetry |
 | Always preserves norm? | Yes                  | Not necessarily          |
 
+> Unitary = preserves length.
+> Involutory = self-inverse.
 
 U: unitary operator or matrix
 
@@ -95,9 +100,9 @@ Key properties of Pauli matrices:
 Applications of each
 - $\sigma_x$ looks symmetrical to the identity matrix, so it is Bit-flipping, more precisely
     - $\sigma_1 \ket{0} = \ket{1}, \quad \sigma_1 \ket{1} = \ket{0}$
-        - $\therefore ket{0}$ and $\ket{1}$ are not eigenvectors of $\sigma_z$
+        - $\therefore \ket{0}$ and $\ket{1}$ are ***not*** eigenvectors of $\sigma_x$
 - $\sigma_z$ is the phase flip operator, it leaves $\ket{0}$ unchanged but flips $\ket{1}$, more precisely
-    - $\sigma_z \ket{0} = \ket{0}, \quad \sigma_z \ket{1} = - \ket{1} $
+    - $\sigma_z \ket{0} = \ket{0}, \quad \sigma_z \ket{1} = - \ket{1}$
         - $\therefore \ket{0}$ and $\ket{1}$ are eigenvectors of $\sigma_z$ with eigenvalues 1 and -1, respectively.
 > For information theorists, always log base two unless otherwise noted.
 
@@ -105,7 +110,16 @@ relative entropy of a positive operator A with respect to a positive operator B:
 
 $$S(A||B) \equiv tr(A \log A) - tr (A \log B)$$
 
-where $tr$ is the trace that adds up the diagonals: $tr(A) = \sum_{i} A_{ii}$ 
+> Classical entropy is a sum of probabilities, but in quantum mechanics, a state is a density matrix $\rho$, not a probability vector. every density matrix can be diagonalized: $\lambda_i \ket{i}\bra{i}$. where $\lambda_i$ are eigenvalues which behave like probabilities.(https://quantum.cloud.ibm.com/learning/en/courses/general-formulation-of-quantum-information/density-matrices/density-matrix-basics)
+> Quantum entropy is defined as 
+> $$S(\rho) = - tr(\rho \log \rho)$$
+> Exactly the classical Shannon entropy — but applied to eigenvalues.
+
+where $tr$ is the trace that adds up the diagonals: $tr(A) = \sum_{i} A_{ii}$.
+- It measures how distinguishable two quantum states are.
+- Trace has a key cyclic property, $tr(AB) = tr(BA)$.
+- The trace of a matrix equals the sum of its eigenvalues:
+
 
 $\oplus$ denotes XOR or modulo two addition.
 - The CNOT gate acts like $\ket{a} \ket{b} \implies \ket{a} \ket{a \oplus b}$. So the second qubit flips only if the first qubit is 1.
@@ -164,17 +178,17 @@ networked information theory
 
 ### 1.1.2 Future directions
 
-Quantum computation and quantum information has taught us to think physically
+Quantum computation and quantum information has taught us to **think physically**
 about computation, and we have discovered that this approach yields many new and
 exciting capabilities for information processing and communication.
 
 we can also learn to think computationally about
 physics.
 
-Classical: power source -> electricity -> classical computation 
+<!-- Classical: power source -> electricity -> classical computation 
 
 New: power source -> (directly) -> computation
-
+ -->
 ## 1.2 Quantum bits
 
 > we mostly treat qubits as abstract mathematical objects rather than physical objects.
@@ -277,8 +291,7 @@ Box 1.1: Decomposing single qubit operations
 
 The prototypical multi-qubit quantum logic gate is the controlled-NOT or CNOT gate.
 
-This gate has two input qubits, known as the control qubit and the target qubit, respec-
-tively.
+This gate has two input qubits, known as the control qubit and the target qubit, respectively.
 
 The action of the gate may be described as follows. 
 - If the control qubit is set to
@@ -321,3 +334,83 @@ Basis states can be arbitrary but they must be *ortho-normal* to perform a measu
 This new formalism is the best for describing observed experimental results, such as in the Stern–Gerlach experiment.
 
 ### 1.3.4 Quantum circuits
+
+3 features not allowed in quantum circuits
+1. no loops allowed 
+2. FANIN(classical circuit wires to be ‘joined’ together) not allowed.
+   1. Obviously this operation is not reversible and therefore not unitary,
+3. FANOUT(whereby several copies of a bit are produced) not allowed
+
+Suppose U is any unitary matrix(quantum gate) on $n$ qubits, then controlled-U naturally has a definition that has a single control qubit(indicated by the line with the black dot) and n target qubits.
+- If the control qubit is set to 0 then nothing happens to the target qubits.
+- If the control qubit is set to 1 then the gate U is applied to the target qubits.
+
+Measurement: converts a single qubit state into a probabilistic classical bit M, with a probability ...
+
+### 1.3.5 Copying Qubits 
+
+No cloning theorem: It is impossible to copy an unknown quantum state.
+- Because determining a state instantly collapses its hidden information.
+
+If we try to "copy" using a CNOT gate, we get:
+
+$$\ket{\psi}\ket{\psi} = a^2 \ket{00} + ab \ket{01} + ab \ket{10} + b^2 \ket{11} \tag{1.22}$$
+
+> $\ket{\psi} \ket{\psi} \equiv \ket{\psi} \otimes \ket{\psi}$, the tensor product, (NOT the matrix multiplication).
+
+### 1.3.6 Bell states
+
+Bell states(or sometimes the EPR states or EPR pairs)
+- Maximally entangled: If you measure one qubit, the other is perfectly determined.
+- not separable ???
+- Bell basis(orthonormal) of the 2 qubit Hilbert space
+
+Their creation follows this idea: Hadamard creates superposition, CNOT creates entanglement.
+
+### 1.3.7 Example: quantum teleportation
+
+**Quantum teleportation** is a
+technique for moving quantum states around, even in the absence of a quantum commu-
+nications channel linking the sender of the quantum state to the recipient.
+- quantum teleportation is a way of utilizing the
+entangled EPR pair in order to send "almost"(up to a known Pauli error) $\ket{\psi}$ to Bob, with only a small overhead of classical communication.
+
+
+| Alice sends | Bob applies |
+| ----------- | ----------- |
+| 00          | ( I )       |
+| 01          | ( X )       |
+| 10          | ( Z )       |
+| 11          | ( XZ )      |
+
+Summing up, Bob needs to apply the transformation $Z^{M_1} X^{M_2}$
+
+
+Many interesting features of quantum teleporation:
+1. It does not enable faster than light communication. Because the classical bit is still transmitted over a classical communications channel.
+2. It does not violate the no-cloning theorem. After teleportation, target qubit is in state $\ket{\psi}$ and the original qubit has already collapsed.
+
+Quantum teleportation emphasizes the interchangeability of **different** resources in quantum mechanics, showing that 
+one shared EPR pair together with two classical bits of communication is a resource at least the equal of one qubit of communication.
+
+## 1.4 Quantum Algorithms 
+### 1.4.1 Classical computations on a quantum computer
+the reason quantum circuits cannot be used to directly simulate classical circuits
+is because unitary quantum logic gates are inherently reversible, whereas many classical
+logic gates such as the NAND gate are inherently irreversible.
+
+A classical Toffoli gate has 3 bits, 2 control bits and 1 target bit which is only filpped when both of the control bits are 1.
+
+The quantum Toffoli gate can be used to simulate **irreversible** classical logic gates.
+
+Quantum computers can efficiently simulate non-deterministic classical computers(e.g., random number generation).
+
+### 1.4.2 Quantum parallelism
+
+Quantum parallelism is a fundamental feature of many quantum algorithms.
+
+Walsh–Hadamard transform.
+
+> It changes basis from Computational basis (bit states) to Phase basis (interference patterns of $\pm 1$). It’s like a simplified Fourier transform over binary strings. It spreads amplitude evenly across states, enabling interference.
+
+### 1.4.3 Deutsch’s algorithm
