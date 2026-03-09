@@ -34,3 +34,30 @@ In Quantum Mechanics, Eigenvalues = possible measurement outcomes. Eigenvectors 
 Measurement probabilities reflect how aligned the state is with each eigenvector.
 - Equal alignment = equal probability.
 - Unequal alignment = unequal probability.
+
+Scalar matrix: has all main diagonal entries the same, with zero everywhere else
+
+Symmetric matrix matching entries either side of the main diagonal are equal, like this:
+
+Lower triangular is when all entries above the main diagonal are zero
+
+Upper triangular is when all entries below the main diagonal are zero
+
+A singular matrix has no inverse because it has a determinant of 0. This means the system of equations either has no solution or infinitely many solutions.
+
+Only square matrices have determinants. 
+
+$$
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}^{-1}
+=
+\frac{1}{Det(A)}
+\begin{bmatrix}
+d & -b \\
+-c & a
+\end{bmatrix}
+$$
+
+Gauss-Jordan method
